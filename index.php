@@ -4,6 +4,7 @@ require_once 'app/info.php';
 require_once 'db/connectdb.php';
 
 if ( isset($_GET['addtask']) ) {
+
 	$tarea = htmlspecialchars($_POST['tarea'], ENT_QUOTES, 'UTF-8');
 	$nivel = htmlspecialchars($_POST['nivel'], ENT_QUOTES, 'UTF-8');
 	$idLocation = htmlspecialchars($_POST['idLocation'], ENT_QUOTES, 'UTF-8');
@@ -19,9 +20,9 @@ if ( isset($_GET['addtask']) ) {
 
 	if ( empty($errores) ) {
 		try{
-			$sql = "INSERT INTO tasks (idLocal, task, level) VALUES (:idLocal, :tarea, :nivel)";
+			$sql = "INSERT INTO tasks (idLocal, task, level) VALUES (:idLocation, :tarea, :nivel)";
 			$ps = $pdo->prepare($sql);
-			$ps->bindValue(':idLocal', $idLocation);
+			$ps->bindValue(':idLocation', $idLocation);
 			$ps->bindValue(':tarea', $tarea);
 			$ps->bindValue(':nivel', $nivel);
 			$ps->execute();
@@ -92,13 +93,13 @@ if ( isset($_GET['deletetask']) )
 }
 
 if ( isset($_GET['tareaasc']) ) {
-	$sql = 'SELECT id, task, level FROM tasks WHERE doneat IS NULL AND deletedat IS NULL ORDER BY task ASC';
+	$sql = 'SELECT id, task, level, location FROM tasks JOIN location ON tasks.idLocal = location.idLocation WHERE tasks.doneat IS NULL AND tasks.deletedat  IS NULL ORDER BY tasks.task ASC';
 }elseif ( isset($_GET['tareadesc']) ) {
-	$sql = 'SELECT id, task, level FROM tasks WHERE doneat IS NULL AND deletedat IS NULL ORDER BY task DESC';
+	$sql = 'SELECT id, task, level, location FROM tasks JOIN location ON tasks.idLocal = location.idLocation WHERE tasks.doneat IS NULL AND tasks.deletedat  IS NULL ORDER BY tasks.task DESC';
 }elseif ( isset($_GET['nivelasc']) ) {
-	$sql = 'SELECT id, task, level FROM tasks WHERE doneat IS NULL AND deletedat IS NULL ORDER BY level ASC';
+	$sql = 'SELECT id, task, level, location FROM tasks JOIN location ON tasks.idLocal = location.idLocation WHERE tasks.doneat IS NULL AND tasks.deletedat  IS NULL ORDER BY tasks.level ASC';
 }elseif ( isset($_GET['niveldesc']) ) {
-	$sql = 'SELECT id, task, level FROM tasks WHERE doneat IS NULL AND deletedat IS NULL ORDER BY level DESC';
+	$sql = 'SELECT id, task, level, location FROM tasks JOIN location ON tasks.idLocal = location.idLocation WHERE tasks.doneat IS NULL AND tasks.deletedat  IS NULL ORDER BY tasks.level DESC';
 }else{
 	$sql = 'SELECT * FROM tasks JOIN location ON tasks.idLocal = location.idLocation WHERE tasks.doneat IS NULL AND tasks.deletedat IS NULL ORDER BY tasks.level DESC, tasks.task ASC';
 }

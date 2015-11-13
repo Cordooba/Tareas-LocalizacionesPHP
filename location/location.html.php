@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title>Mi lista de tareas</title>
+	<title>Localizaciones</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.css">
 	</head>
 <body>
@@ -18,15 +18,19 @@
 				</div>
 				<table class="table table-striped">
 					<tbody>
+						<tr>
+							<th>Localizacion</th>
+							<th>Latitud</th>
+							<th>Longitud</th>
+							<th>Eliminar</th>
+							<th>Editar</th>
+						</tr>
 						<?php if ( !empty($locality) ): ?>
 							<?php foreach($locality as $dato): ?>
 								<tr>
-									<th>Localizacion</th>
-									<th>Eliminar</th>
-									<th>Editar</th>
-								</tr>
-								<tr>
 									<th><?=$dato['location']?></th>
+									<th><?=$dato['latitud']?></th>
+									<th><?=$dato['longitud']?></th>
 									<th class="listicon">
 									<form action="?deleteLocation" method="post">
 										<input type="hidden" name="idLocation" value="<?=$dato['idLocation']?>">

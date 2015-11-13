@@ -139,11 +139,11 @@
 						</select>
 					</div>
 					<div class="form-group col-xs-12 col-lg-4">
-					    <select class="form-control" name="nivel">
+					    <select class="form-control" name="idLocation">
 					      <option>Localización</option>
 					      <?php if ( !empty($locality) ):?> 
 						  	<?php foreach ($locality as $local): ?>
-						  		<option name="idLocation" value="<?=$local['idLocation']?>" <?php if ( isset($local) ) ; ?>><?=$local['location']?></option>
+						  		<option name="idLocation" value="<?php if ( isset ($local['idLocation']) ) echo $local['idLocation'] ; ?>"><?php if ( isset($local) ) echo $local['location'] ; ?></option>
 						  	<?php endforeach; ?>
 						  <?php endif; ?>	
 						</select>
