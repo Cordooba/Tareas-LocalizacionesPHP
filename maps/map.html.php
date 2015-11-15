@@ -44,56 +44,77 @@
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 13,
     center: myLatLng
+
   });
 
-  <?php foreach ($locality as $local) : ?>
+  <?php 
 
-  //var contentString = '<div id="content">'+
-  //    '<div id="siteNotice">'+
-  //    '</div>'+
-  //    '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
-  //    '<div id="bodyContent">'+
-  //    '<p><b>Uluru</b>, </p>'+
-  //    '</div>'+
-  //    '</div>';    
+  $contentString = "";
 
-  //var infowindow = new google.maps.InfoWindow({
-  //  content: contentString<?=$local['idLocation']?>
-  //});
+  foreach ($locality as $local) { 
 
-  var marker = new google.maps.Marker({
-    position: myLatLng<?=$local['idLocation']?>,
-    /*icon: <?php switch ( $local['level'] ) {
-          case '1':
-            echo "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
-            break;
-          case '2':
-            echo "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-            break;
-          case '3':
-            echo "http://maps.google.com/mapfiles/ms/icons/purple-dot.png";
-            break;
-          case '4':
-            echo "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
-            break;
-          case '5':
-            echo "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-            break;
-          default:
-          break;
-    }
-    ?>, */
-    map: map,
-    title: '<?=$local['location']?>'
-  });
+  "var contentString".$local['idLocation']." = \"<div id='content'>
+  <div id='siteNotice'></div><h1 id='firstHeading' class='firstHeading'>".
+  $local['task']."</h1><div id='bodyContent'><p><b>".
+  $local['location']."</b>, </p></div></div>\";\n";   
 
-  //marker.addListener('click', function() {
-  //  infowindow.open(map, marker);
-  //});
-
-  <?php endforeach; ?>
   }
 
+  echo $contentString;
+
+  $infoWindow = "\n\n";
+
+  foreach ($locality as $local) {
+    $infoWindow .= " var infowindow".$local['idLocation'].
+    " = new google.maps.InfoWindow({\ncontent: contentString".$local['idLocation']."});";
+  }
+  echo $infoWindow;
+
+  $markers = "\n\n";
+  foreach ($locality as $local) {
+
+    switch ( $local['level'] ) {
+          case '1':
+            $icon = "'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'";
+            break;
+          case '2':
+            $icon = "'http://maps.google.com/mapfiles/ms/icons/green-dot.png'";
+            break;
+          case '3':
+            $icon = "'http://maps.google.com/mapfiles/ms/icons/purple-dot.png'";
+            break;
+          case '4':
+            $icon = "'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'";
+            break;
+          case '5':
+            $icon = "'http://maps.google.com/mapfiles/ms/icons/red-dot.png'";
+            break;
+          default:
+            break;
+    }
+
+    $markers .= "var marker".$local['idLocation']." = new 
+    google.maps.Marker({\nposition: myLatLng".$local['idLocation'].",\nicon:
+    ".$icon.",\nmap: map,\ntitle: '".$local['location']."'});";
+
+  }
+
+  echo $markers;
+
+  $markerListeners = "";
+
+  foreach ($locality as $local) {
+
+    $markerListeners .= "marker".$local['idLocation'].".addListener('click', function() {
+    infowindow".$local['idLocation'].".open(map, 
+    marker".$local['idLocation'].");\n});";
+  
+  }
+  
+  echo $markerListeners;
+
+  ?>
+  
     </script>
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRurkRTeEvj6K2g3YgEECHGBu5r4-T0ls&signed_in=true&callback=initMap"></script>
